@@ -1,0 +1,123 @@
+<head>
+</head>
+<body>
+ <h1> Wall Bounce </h1>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://static.codehs.com/gulp/3ee6f1489a3909a788e32cbc39525a167dc5988d/chs-js-lib/chs.js"></script>
+
+
+<style>
+canvas {
+    border: 1px solid black;
+    display: inline-block;
+    vertical-align: top;
+}
+
+pre {
+    border: 1px solid black;
+    display: inline-block;
+    width: 400px;
+    height: 500px;
+    background-color: #F5F5F5;
+}
+</style>
+
+</head>
+
+<body>
+<h1>game</h1>
+
+
+
+<canvas
+width="400"
+height="500"
+class="codehs-editor-canvas"></canvas>
+<pre id="console"></pre>
+
+<script>
+window.onload = function() {
+
+    var ball;
+var dx = Randomizer.nextInt(1,10);
+var dy = Randomizer.nextInt(1,10);
+
+var speed = 0;
+
+var x = Randomizer.nextInt(10,400);
+var y = Randomizer.nextInt(10,400);
+
+
+/* This program has a ball bounce around the screen. */
+function start(){
+	ball = new Circle(20);
+	ball.setPosition(x, y);
+	add(ball);
+	setTimer(draw, speed);
+}
+
+function draw(){
+	checkWalls();
+	ball.move(dx, dy);
+}
+
+function checkWalls(){
+	// Bounce off right wall
+	if(ball.getX() + ball.getRadius() > getWidth()){
+		dx = -dx;
+		money_system();
+	}	
+	// Bounce off left wall
+	if(ball.getX() - ball.getRadius() < 0){
+		dx = -dx;
+		money_system();
+	}
+	// Bounce off bottom wall
+	if(ball.getY() + ball.getRadius() > getHeight()){
+		dy = -dy;
+		money_system();
+	}
+	// Bounce off top wall
+	if(ball.getY() - ball.getRadius() < 0){
+		dy = -dy;
+		money_system();
+	}
+}
+
+var money = 0;
+
+var txt = new Text(money, "30pt Arial");
+txt.setPosition(160, 100);
+txt.setColor(Color.blue);
+
+function money_system(){
+    remove(txt);
+    var money2 = money + 1;
+    //var money = money.toString();
+    txt.setText(money2);
+    add(txt);
+    println(money);
+    println(money2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (typeof start === 'function') {
+        start();
+    }
+};
+</script>
