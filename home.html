@@ -1,10 +1,12 @@
-<head>
-</head>
-<body>
- <h1> Wall Bounce </h1>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-<script type="text/javascript" src="https://static.codehs.com/gulp/3ee6f1489a3909a788e32cbc39525a167dc5988d/chs-js-lib/chs.js"></script>
+<html>
+<head>
+<title>game tester</title>
+	
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
+
+
+<script type="text/javascript" src="https://static.codehs.com/gulp/13e0fbc7a27cd9f139ca6073c86345baa183f767/chs-js-lib/chs.js"></script>
 
 
 <style>
@@ -26,7 +28,7 @@ pre {
 </head>
 
 <body>
-<h1>game</h1>
+<h1>game tester</h1>
 
 
 
@@ -39,81 +41,174 @@ class="codehs-editor-canvas"></canvas>
 <script>
 window.onload = function() {
 
-    var ball;
-var dx = Randomizer.nextInt(1,10);
-var dy = Randomizer.nextInt(1,10);
+    // This is the speed indicator at the top left corner of the game screen
+var speed = 5;
 
-var speed = 0;
+var words = "Speed level: " + speed;
 
-var x = Randomizer.nextInt(10,400);
-var y = Randomizer.nextInt(10,400);
-
-
-/* This program has a ball bounce around the screen. */
-function start(){
-	ball = new Circle(20);
-	ball.setPosition(x, y);
-	add(ball);
-	setTimer(draw, speed);
+function speed_indicator(){
+    var si = new Text("Speed: 5", "21pt Times New Roman");
+    si.setPosition(14, 37);
+    si.setColor(Color.blue);
+    add(si);
 }
 
+
+/*
+
+Use 'P' to pause music
+Use 'L' to continue the music
+
+*/
+var ball;
+//var ball2;
+
+var dx = 8;
+var dy = 8;
+
+// Miniseconds it takes to update game info/ check for events
+var timer = 50;
+
+// Position where the wall will spawn on the map
+var x = Randomizer.nextInt(50,350);
+var y = Randomizer.nextInt(50,350);
+
+// Cool Music saver
+var music = new Audio("https://jorti1.github.io/Wall-Bounce-Website/Nctrnm_-_Anthony.mp3");
+
+// The start function starts the music, spawns the wall, and sets timers for other functions
+function start(){
+    music.play();
+    music.loop = true;
+	ball = new Circle(14);
+	ball.setPosition(x, y);
+	add(ball);
+	//ball2 = new Circle(14);
+	//ball2.setPosition(x,y);
+	//add(ball2);
+	setTimer(draw, timer);
+	speed_indicator();
+    keyDownMethod(pause_play);
+    //keyDownMethod(speeed);
+    currency();
+    score_board();
+}
+
+//This is the pause & play function
+function pause_play(e) {
+	if(e.keyCode == Keyboard.letter('p')){
+		music.pause();
+	}
+	if(e.keyCode == Keyboard.letter('l')){
+		music.play();
+	}
+}
+
+// This is what makes the ball move wall to wall
 function draw(){
 	checkWalls();
 	ball.move(dx, dy);
+	//ball2.move(dx,dy);
 }
+var score_text = new Text("Score: ", "21pt Times New Roman");
+score_text.setPosition(14, 100);
+score_text.setColor(Color.blue);
+add(score_text);
+var score = 0;
+var wordz = "Score: " + score;
+var si = new Text(wordz, "21pt Times New Roman");
+si.setPosition(90, 100);
+si.setColor(Color.blue);
+add(si);
+var bal = 0;
+var b = new Text(bal, "21pt Times New Roman");
+b.setPosition(120, 70);
+b.setColor(Color.blue);
+add(b);
+var be = new Text("Balance:", "21pt Times New Roman");
+be.setPosition(14, 70);
+be.setColor(Color.blue);
+add(be);
 
+// This detects for a wall and gives the wall a direction to go to after hitting a wall
 function checkWalls(){
 	// Bounce off right wall
 	if(ball.getX() + ball.getRadius() > getWidth()){
 		dx = -dx;
-		money_system();
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
 	}	
 	// Bounce off left wall
 	if(ball.getX() - ball.getRadius() < 0){
 		dx = -dx;
-		money_system();
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
 	}
 	// Bounce off bottom wall
 	if(ball.getY() + ball.getRadius() > getHeight()){
 		dy = -dy;
-		money_system();
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
 	}
 	// Bounce off top wall
 	if(ball.getY() - ball.getRadius() < 0){
 		dy = -dy;
-		money_system();
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
 	}
+	
+	/*
+	if(ball2.getX() + ball2.getRadius() > getWidth()){
+		dx = -dx;
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
+	}	
+	// Bounce off left wall
+	if(ball2.getX() - ball2.getRadius() < 0){
+		dx = -dx;
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
+	}
+	// Bounce off bottom wall
+	if(ball2.getY() + ball2.getRadius() > getHeight()){
+		dy = -dy;
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
+	}
+	// Bounce off top wall
+	if(ball2.getY() - ball2.getRadius() < 0){
+		dy = -dy;
+		score = score + 1;
+		score_board();
+		bal = bal + 1;
+		currency();
+	}*/
 }
 
-var money = 0;
-
-var txt = new Text(money, "30pt Arial");
-txt.setPosition(160, 100);
-txt.setColor(Color.blue);
-
-function money_system(){
-    remove(txt);
-    var money2 = money + 1;
-    //var money = money.toString();
-    txt.setText(money2);
-    add(txt);
-    println(money);
-    println(money2);
+function score_board(){
+    var text = (score/4)+2;
+    text = Math.round(text);
+    si.setText(text);
 }
+// Currency system
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+function currency(){
+    b.setText(bal);
+}
 
 
     if (typeof start === 'function') {
@@ -121,3 +216,6 @@ function money_system(){
     }
 };
 </script>
+
+</body>
+</html>
